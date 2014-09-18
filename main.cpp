@@ -62,13 +62,13 @@ void readConf(){
 			int index = line.find_first_of("username=");
 			if(index >= 0){
 				username= line.substr(9,len);
-				cout << username << endl;
+				//cout << username << endl;
 				continue;
 			}
 			index = line.find_first_of("secret=");
 			if(index >= 0){
 				secret= line.substr(7,len);
-				cout << secret << endl;
+				//cout << secret << endl;
 				continue;
 			}
 		}
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]){
 
 	string sig = genorate_sig(isGet,string(query),date);
 
-	cout << sig << endl;
+	//cout << sig << endl;
 
 	boost::uint8_t hmacsha1digest[sha1::HASH_SIZE];
 	hmac<sha1>::calc(sig, secret, hmacsha1digest);
