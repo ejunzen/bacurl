@@ -18,8 +18,6 @@ static string secret = "bc58e2c15abd49b23f902a4d6a324ca2";
 
 static int hasUrl = 0;
 
-string genorate_sig();
-
 string genorate_sig(int isGet,string url,string date){
 	if(isGet>0){
 		return "GET " + url + "\n" + date;
@@ -32,6 +30,7 @@ char* parseUrl(char* url){
 	int hasHttp = 0;
 	int index=0;
 	int len = strlen(url);
+
 	//step1 find http
 	char* start = strstr(url,"http://");
 	if(start != NULL&&start == url){
@@ -44,13 +43,23 @@ char* parseUrl(char* url){
 		}
 		index++;
 	}
+
+	//step2 find ?
+	int end = index;
+	while(end < len){
+		if(url[end] == '?'){
+			break;
+		}
+		end++;
+	}		
+
 	char* host = (char*)malloc(index);
 	char* queryString = NULL;
 	memcpy(host,url+hasHttp,index-hasHttp);
 	if(index<len){
 		queryString = (char*)malloc(len -index +1);
 		memset(queryString,0,len-index+1);
-		memcpy(queryString,url+index,len-index);
+		memcpy(queryString,url+index,len-index-(len-end));
 	}
 	return queryString;
 }
@@ -136,7 +145,7 @@ int main(int argc, char* argv[]){
 		cmd += string(argv[i]);
 	    cmd += " ";
 	}
-	//cout << cmd << endl;
+	cout << cmd << endl;
 
 	//return 0;
 	return system(cmd.c_str());
