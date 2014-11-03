@@ -16,6 +16,8 @@ using namespace cryptlite;
 static string username = "hotel";
 static string secret = "bc58e2c15abd49b23f902a4d6a324ca2";
 
+static int hasUrl = 0;
+
 string genorate_sig();
 
 string genorate_sig(int isGet,string url,string date){
@@ -82,7 +84,7 @@ int main(int argc, char* argv[]){
 	int isGet = 1;
 
 	for(int i=1;i<argc;i++){
-		if(strcmp(argv[i],"-d")==0){
+		if(strstr(argv[i],"-d") != NULL){
 			isGet=0;
 		}
 	}
@@ -113,10 +115,29 @@ int main(int argc, char* argv[]){
 
 	string cmd = "curl -H\"Date:"+date+"\" -H\"Authorization:MWS "+username+":"+sha1base64+"\" ";
 	for(int i=1;i<argc;i++){
+
+		if(strstr(argv[i],"-d")!=NULL
+			&& strcmp(argv[i],"-d")!= 0){
+			
+			string temp = string(argv[i]);
+			int len = strlen(argv[i]);
+			cmd += "-d\"";
+			cmd += temp.substr(2);
+			cmd += "\" ";
+			continue;
+		}
+
+		if(strstr(argv[i],"http://")!=NULL
+		  || strstr(argv[i],"www")!=NULL
+		  || (i==argc-1 && hasUrl==0)){
+			cmd += "--url ";
+			hasUrl = 1;
+		}
 		cmd += string(argv[i]);
 	    cmd += " ";
 	}
 	//cout << cmd << endl;
 
+	//return 0;
 	return system(cmd.c_str());
 }
