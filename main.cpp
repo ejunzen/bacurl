@@ -145,7 +145,7 @@ int main(int argc, char* argv[]){
 		cmd += string(argv[i]);
 	    cmd += " ";
 	}
-	cout << cmd << endl;
+	//cout << cmd << endl;
 
 	//return 0;
 	return system(cmd.c_str());
