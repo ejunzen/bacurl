@@ -10,6 +10,8 @@
 
 #include <time.h>
 
+#define DEBUG 1
+
 using namespace std;
 using namespace cryptlite;
 
@@ -61,6 +63,9 @@ char* parseUrl(char* url){
 		memset(queryString,0,len-index+1);
 		memcpy(queryString,url+index,len-index-(len-end));
 	}
+#ifdef DEBUG
+	cout << queryString << endl;
+#endif
 	return queryString;
 }
 
@@ -70,16 +75,20 @@ void readConf(){
 	if(in){
 		while(getline(in,line)){
 			int len = line.length();
-			int index = line.find_first_of("username=");
-			if(index >= 0){
+			int index = line.find_first_of("sername=");
+			if(index > 0){
 				username= line.substr(9,len);
-				//cout << username << endl;
+#ifdef DEBUG
+				cout << username << endl;
+#endif
 				continue;
 			}
-			index = line.find_first_of("secret=");
-			if(index >= 0){
+			index = line.find_first_of("ecret=");
+			if(index > 0){
 				secret= line.substr(7,len);
-				//cout << secret << endl;
+#ifdef DEBUG
+				cout << secret << endl;
+#endif
 				continue;
 			}
 		}
@@ -94,6 +103,9 @@ int main(int argc, char* argv[]){
 
 	for(int i=1;i<argc;i++){
 		if(strstr(argv[i],"-d") != NULL){
+			isGet=0;
+		}
+		if(strstr(argv[i],"-X")!= NULL && i+1 < argc && strstr(argv[i+1],"POST")!=NULL){
 			isGet=0;
 		}
 	}
@@ -115,19 +127,27 @@ int main(int argc, char* argv[]){
 
 	string sig = genorate_sig(isGet,string(query),date);
 
-	//cout << sig << endl;
-
+#ifdef DEBUG
+	cout << sig << endl;
+#endif
 	boost::uint8_t hmacsha1digest[sha1::HASH_SIZE];
 	hmac<sha1>::calc(sig, secret, hmacsha1digest);
 
+#ifdef DEBUG
+	cout << hmacsha1digest << endl;
+#endif
 	std::string sha1base64 = base64::encode_from_array(hmacsha1digest,sha1::HASH_SIZE);
+
+#ifdef DEBUG
+	cout << sha1base64 << endl;
+#endif
 
 	string cmd = "curl -H\"Date:"+date+"\" -H\"Authorization:MWS "+username+":"+sha1base64+"\" ";
 	for(int i=1;i<argc;i++){
 
 		if(strstr(argv[i],"-d")!=NULL
-			&& strcmp(argv[i],"-d")!= 0){
-			
+				&& strcmp(argv[i],"-d")!= 0){
+
 			string temp = string(argv[i]);
 			int len = strlen(argv[i]);
 			cmd += "-d\"";
@@ -137,15 +157,17 @@ int main(int argc, char* argv[]){
 		}
 
 		if(strstr(argv[i],"http://")!=NULL
-		  || strstr(argv[i],"www")!=NULL
-		  || (i==argc-1 && hasUrl==0)){
+				|| strstr(argv[i],"www")!=NULL
+				|| (i==argc-1 && hasUrl==0)){
 			cmd += "--url ";
 			hasUrl = 1;
 		}
 		cmd += string(argv[i]);
-	    cmd += " ";
+		cmd += " ";
 	}
-	//cout << cmd << endl;
+#ifdef DEBUG
+	cout << cmd << endl;
+#endif	
 
 	//return 0;
 	return system(cmd.c_str());
