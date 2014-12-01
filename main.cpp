@@ -10,13 +10,13 @@
 
 #include <time.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 using namespace std;
 using namespace cryptlite;
 
-static string username = "hotel";
-static string secret = "bc58e2c15abd49b23f902a4d6a324ca2";
+static string username = "hotel-biz";
+static string secret = "b0966084617060081c33e04726ab281c";
 
 static int hasUrl = 0;
 
