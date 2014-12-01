@@ -10,8 +10,6 @@
 
 #include <time.h>
 
-#define DEBUG 0
-
 using namespace std;
 using namespace cryptlite;
 
@@ -162,7 +160,13 @@ int main(int argc, char* argv[]){
 			cmd += "--url ";
 			hasUrl = 1;
 		}
+		if(argv[i][0] != '-'){
+        	cmd += "\"";
+        }
 		cmd += string(argv[i]);
+		if(argv[i][0] != '-'){
+        	cmd += "\"";
+        }
 		cmd += " ";
 	}
 #ifdef DEBUG
