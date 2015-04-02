@@ -13,9 +13,10 @@
 using namespace std;
 using namespace cryptlite;
 
-static string username = "hotel-biz";
-static string secret = "b0966084617060081c33e04726ab281c";
+static string username = "otel";
+static string secret = "bc58e2c15abd49b23f902a4d6a324ca2";
 
+void string_replace(string & strBig, const string & strsrc, const string &strdst);
 static int hasUrl = 0;
 
 string genorate_sig(int isGet,string url,string date){
@@ -75,7 +76,7 @@ void readConf(){
 			int len = line.length();
 			int index = line.find_first_of("sername=");
 			if(index > 0){
-				username= line.substr(9,len);
+				username= line.substr(9,len-1);
 #ifdef DEBUG
 				cout << username << endl;
 #endif
@@ -83,7 +84,7 @@ void readConf(){
 			}
 			index = line.find_first_of("ecret=");
 			if(index > 0){
-				secret= line.substr(7,len);
+				secret= line.substr(7,len-1);
 #ifdef DEBUG
 				cout << secret << endl;
 #endif
