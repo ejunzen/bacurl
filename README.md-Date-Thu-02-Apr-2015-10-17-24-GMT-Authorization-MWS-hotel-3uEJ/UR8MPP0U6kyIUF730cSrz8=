@@ -1,0 +1,14 @@
+#bacurl
+
+curl with ba auth
+
+这是给内部的使用curl，实现主要是拼上date和auth两个http头以后，直接调用curl
+
+类似于这样
+
+```
+bacurl http://10.64.37.244:8102/admin/hotel/sync/5250513
+```
+发出这样的头信息
+>Date:Thu, 02 Apr 2015 10:17:24 GMT
+>Authorization:MWS hotel:3uEJ/UR8MPP0U6kyIUF730cSrz8=
